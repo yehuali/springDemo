@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+        <bean id="greetingBefore" class="org.spring.aop.advice.GreetingBeforeAdvice"/>
+        <bean id="greetingAfter" class="org.spring.aop.advice.GreetingAfterAdvice"/>
+        <bean id="target" class="org.spring.aop.advice.NaiveWaiter"/>
+        <!--<bean id="waiter" class="org.springframework.aop.framework.ProxyFactoryBean"
+              p:proxyInterfaces="org.spring.aop.advice.Waiter"
+              p:interceptorNames="greetingBefore,greetingAfter"
+              p:target-ref="target"/>-->
+        <bean id="greetingAround" class="org.spring.aop.advice.GreetingInterceptor"/>
+        <bean id="waiter" class="org.springframework.aop.framework.ProxyFactoryBean"
+              p:proxyInterfaces="org.spring.aop.advice.Waiter"
+              p:interceptorNames="greetingAround"
+              p:target-ref="target"/>
+
+
+</beans>

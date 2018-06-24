@@ -1,0 +1,3 @@
+JDK的动态代理主要涉及java.lang.reflect包中的两个类：Proxy和InvocationHandler
+1.InvocationHandler:接口，可以通过实现该接口定义横切逻辑，并通过反射机制调用目标类的代码
+2.Proxy利用InvocationHandler动态创建一个符合某一接口的实例，生成目标类的代理对象
