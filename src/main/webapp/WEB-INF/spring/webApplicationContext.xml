@@ -13,6 +13,7 @@
          JSR-349: hibernate-validator-5.x.x   validation-api-1.1.x
          JSR-303: hibernate-validator-4.x.x   validation-api-1.0.x.
          否则会报EL找不到错误
+         默认装配一个数据校验LocalValidatorFactoryBean
     -->
     <mvc:annotation-driven conversion-service="conversionService"/>
     <!-- 数据转换
@@ -31,6 +32,9 @@
             p:suffix=".jsp"/>
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"
           p:messageConverters-ref="messageConverters"/>
+    <!--国际化资源 -->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
+                            p:basename="i18n.message"/>
 
     <util:list id="messageConverters">
         <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter"/>
@@ -56,4 +60,5 @@
             </list>
         </property>
     </bean>
+
 </beans>

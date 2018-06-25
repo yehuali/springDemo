@@ -6,11 +6,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Insert title here</title>
+    <style type="text/css">.errorClass{color: red}</style>
 </head>
 <body>
 <form:form modelAttribute="user" method="post" action="">
+    <form:errors path="*"/><br>
     日期类型：<form:input path="birthday"/><br>
     货币类型：<form:input path="salary"/><br>
+    <form:errors path="salary" cssClass="errorClass"/>
 </form:form>
 </body>
 </html>
