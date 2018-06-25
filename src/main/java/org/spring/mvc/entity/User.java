@@ -3,6 +3,8 @@ package org.spring.mvc.entity;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
@@ -11,10 +13,12 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.util.Date;
 
-@XStreamAlias("message")
-public class User {
+@XStreamAlias("user")
+public class User implements Serializable{
+    private static final long serialVersionUID = -2780580321897392106L;
 
     @XStreamAlias("id")
     @XStreamAsAttribute
@@ -32,19 +36,11 @@ public class User {
     @Length(min=2,max=100)
     private String realName;
 
-    @XStreamAsAttribute
-    @Past
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
-    @XStreamAsAttribute
-    @DecimalMin(value="1000.00")
-    @DecimalMax(value="100000.00")
-    @NumberFormat(pattern="#,###.##")
+    @NumberFormat(pattern = "#,###.##")
     private long salary;
-
-    @XStreamOmitField
-    private Dept dept;
 
     public String getUserId() {
         return userId;
@@ -94,11 +90,8 @@ public class User {
         this.salary = salary;
     }
 
-    public Dept getDept() {
-        return dept;
-    }
-
-    public void setDept(Dept dept) {
-        this.dept = dept;
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
     }
 }

@@ -24,8 +24,9 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
+
     private UserService userService;
+
 
     /**
      * @param user  SpringMVC自动将表单中的数据按参数名和User属性名匹配的方式进行绑定
@@ -99,37 +100,6 @@ public class UserController {
         user.setUserId("1000");
         return new ResponseEntity<User>(user,HttpStatus.OK);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
