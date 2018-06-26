@@ -9,6 +9,17 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:property-placeholder location="/WEB-INF/jdbc.properties"/>
+
+    <!--数据源 destroy-method="close"以便Spring容器关闭时，数据源能够正常关闭 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
+          p:driverClassName="${jdbc.driverClassName}"
+          p:url="${jdbc.url}"
+          p:username="${jdbc.username}"
+          p:password="${jdbc.password}"/>
+
+
     <!-- 简化Spring MVC相关配置 默认创建并注册一个默认的DefaultAnnotationHandlerMapping和一个RequestMappingHandlerAdapter实例
          JSR-349: hibernate-validator-5.x.x   validation-api-1.1.x
          JSR-303: hibernate-validator-4.x.x   validation-api-1.0.x.
@@ -27,14 +38,28 @@
         </property>
     </bean>
     <context:component-scan base-package="org.spring.mvc.*"/>
+    <!--视图解析器
+        InternalResourceViewResolver默认使用InternalResourceView作为视图实现类
+        JSP文件使用JSTL的国际化功能，使用JstlView替换默认的视图实现类-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+            p:viewClass="org.springframework.web.servlet.view.JstlView"
             p:prefix="/WEB-INF/views/"
             p:suffix=".jsp"/>
+    <!--模型数据转换为Json格式输出 modelKeys指定模型中的哪些属性需要输出，默认全部输出为JSON -->
+    <bean id="user/userListJson" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"
+        p:modelKey="userList"/>
+
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"
           p:messageConverters-ref="messageConverters"/>
     <!--国际化资源 -->
-    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
-                            p:basename="i18n.message"/>
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>i18n/messages</value>
+                <value>i18n/content</value>
+            </list>
+        </property>
+    </bean>
 
     <util:list id="messageConverters">
         <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter"/>
@@ -60,5 +85,6 @@
             </list>
         </property>
     </bean>
+
 
 </beans>
