@@ -62,6 +62,55 @@ ThreadLocal为每个使用该变量的线程分配一个独立的变量副本
    
  同步机制采用了“以时间换空间”的方式，访问串行化，对象共享化
  ThrealLocal采用了"以空间换时间"的方式，访问并行化，对象独享化
+ 
+ ===================================================================================
+ 
+在单数据源的情况下，Spring直接使用底层的数据源管理事务
+在多数据源的情况下，Spring通过引用应用服务器中的JNDI资源完成JTA事务
+--->采用相同的事务管理模型
+
+事务管理关键抽象
+在Spring事务管理SPI(Service Provider Interface)的抽象层主要包括3个接口
+PlatformTransactionManager：根据TransactionDefinition提供的事务属性配置信息创建事务
+  1.TransactionStatus getTransaction(TransactionDefinition definition)：该方法根据事务定义信息从事务环境中返回一个已存在的事务，或者创建一个新的事务
+  2.commit(TransactionStatus status):根据事务的状态提交事务
+  3.rollback(TransactionStatus status):将事务回滚
+TransactionDefinition:描述事务隔离级别、超时时间、是否为只读事务和事务传播规则等控制食物具体行为的事务属性
+                      --->可通过XML配置或注解描述
+                    1.事务隔离
+                       ISOLATION_READ_UNCOMMITTED
+                       ISOLATION_READ_COMMITTED
+                       ISOLATION_REPEATABLE_READ
+                       ISOLATION_SERIALIZABLE
+                    2.事务传播：一个事务中执行的所有代码都会运行于同一事务上下文中
+                    .....                                  
+TransactionStatus：描述激活事务的状态
+   1.该接口继承于SavepointManager接口（基于JDBC 3.0保存点的分段事务控制能力提供了嵌套事务的机制）
+     `1.1 Object createSavepoint():创建一个保存点对象
+      1.2 void rollbackToSavepoint(Object savepoint):将事务回滚到特定的保存点上，被回滚的保存点将自动释放
+      1.3 void releaseSavepoint(Object savepoint):释放一个保存点。如果事务提交，则所有的保存点会自动释放，无须手工清除
+   2.TransactionStatus扩展方法
+      2.1`boolean hasSavepoint():判断当前事务是否在内部创建一个保存点
+                                 --->为了支持Spring的嵌套事务而创建的
+      2.2 boolean isNewTransaction():判断当前事务是否是一个新的事务
+      2.3 boolean isCompleted():判断当前事务是否已经结束
+      2.4 boolean isRollbackOnly():判断当前事务是否已经被标识为rollback-only
+      2.5 void setRollbackOnly():该标识通知事务管理器只能将事务回滚
+      
+Spring的事务管理器实现类
+ Spring将事务管理委托给底层具体的持久化实现框架来完成
+ -->Spring为不同的持久化框架提供了PlatformTransactionManager接口的实现类
+ 
+
+事务同步管理器
+ Spring将JDBC的Connection、Hibernate的session等资源在同一时刻是不能多线程共享的
+ -->为了让DAO、Service类做到singleton
+    Spring的事务同步管理器类SynchronizationManager使用ThreadLocal为不同事务线程提供了独立的资源副本
+    Spring为不同的持久化技术提供了一套从TransactionSynchronizationManager中获取对应线程绑定资源的工具类
+    --->从此DAO(必须基于模板类或资源获取工具类创建的DAO) 和 Service(必须采用Spring事务管理机制) 
+
+
+
     
 
       
