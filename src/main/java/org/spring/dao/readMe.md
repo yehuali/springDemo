@@ -108,8 +108,35 @@ Spring的事务管理器实现类
     Spring的事务同步管理器类SynchronizationManager使用ThreadLocal为不同事务线程提供了独立的资源副本
     Spring为不同的持久化技术提供了一套从TransactionSynchronizationManager中获取对应线程绑定资源的工具类
     --->从此DAO(必须基于模板类或资源获取工具类创建的DAO) 和 Service(必须采用Spring事务管理机制) 
+    
+ 
+Spring建议在业务实现类上使用@Transactional注解
+  -->也可以在业务接口上使用@Transactional注解，但注解不能被继承
+      --->在业务接口标注的@Transaction注解不会被业务实现类继承
+ 子类代理：<tx:annotation-driven transaction-manager="txManager" proxy-target-class="true">
+ 
+方法处的注解会覆盖类定义处的注解
 
+通过AspectJ LTW引入事务切面：用于为使用了@Transactional注解的业务类提供事务增强
+在类路径META-INF目录下提供如下AspectJ配置文件
 
+=======================================================
+mysql下载及安装参考：
+https://www.cnblogs.com/lmh2072005/p/5656392.html
+https://blog.csdn.net/BruceLeeNumberOne/article/details/80173796
+停止：net stop mysql
+启动：net start mysql
+
+无法启动：参考https://dev.mysql.com/doc/refman/8.0/en/data-directory-initialization-mysqld.html
+删除之前建的data文件夹，由mysql自己创建即可 否则mysql初始化会报错
+
+======================================================================
+将日志调至DEBUG模式得出结论：
+  在相同线程中进行相互嵌套调用的事务方法工作在相同的事务中
+  不同线程下的事务方法工作在独立的事务中
+  
+ =================================
+ 
 
     
 
