@@ -136,6 +136,17 @@ https://blog.csdn.net/BruceLeeNumberOne/article/details/80173796
   不同线程下的事务方法工作在独立的事务中
   
  =================================
+ Hibernate是一个ORM实现方案，对底层SQL的控制不太方便
+ MyBatis通过模板化技术让用户方便地控制SQL，但没有Hibernate那样高的开发效率
+ 自由度最高的是Spring JDBC
+ 
+ 一个应用采用多种数据访问技术：1.采用ORM技术框架 2.采用偏JDBC的底层技术
+ --->Spring为每种数据访问技术提供相应的事务管理器
+ ORM技术（Hibernate、JPA、JDO）
+ JDBC技术(Spring JDBC、Mybatis)
+ -->前者的会话(Session)是对后者连接(Connection)的封装，所以只要直接采用前者的事务管理器就可以了
+ 
+ 
  
 
     
