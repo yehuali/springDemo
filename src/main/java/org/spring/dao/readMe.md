@@ -146,6 +146,10 @@ https://blog.csdn.net/BruceLeeNumberOne/article/details/80173796
  JDBC技术(Spring JDBC、Mybatis)
  -->前者的会话(Session)是对后者连接(Connection)的封装，所以只要直接采用前者的事务管理器就可以了
  
+ ========================================================
+ 对于基于接口动态代理的AOP事务增强来说，由于接口的方法都必须是public的，不能使用static修饰符
+ 基于CGLib字节码动态代理的方案是通过扩展被增强类，动态创建其子类的方式进行AOP增加植入的
+ --->使用final、static、private修饰符的方法都不能被子类覆盖
  
  
 

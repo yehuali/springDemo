@@ -1,7 +1,9 @@
 package org.spring.dao.jdbcHibernate;
 
-import org.spring.mvc.entity.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +37,15 @@ public class UserService {
     //默认情况下,Hibernate对数据的更改只记录在一级缓存中，等到事务提交或显示调用flush()方法时才会将一级缓存中的数据同步到数据库中
     public void updateLastLogonTime(String userName){
         User user = hibernateTemplate.get(User.class,userName);
-        user.setLastLogo;
+        user.setLastLogonTime(1111);
         hibernateTemplate.update(user);
 
         hibernateTemplate.flush();
+    }
+
+    public static void main(String[] args) {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("org/spring/dao/jdbcHibernate/jdbcHibernate.xml");
+        UserService service = (UserService)ctx.getBean("userService");
+        service.logon("zhangjie");
     }
 }
