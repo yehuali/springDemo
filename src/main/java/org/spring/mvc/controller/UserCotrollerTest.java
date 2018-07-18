@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.Collections;
 
 public class UserCotrollerTest {
-
     @Test
     public void testMethod1() throws IOException {
         try{

@@ -38,6 +38,7 @@ public class UserService {
     public void updateLastLogonTime(String userName){
         User user = hibernateTemplate.get(User.class,userName);
         user.setLastLogonTime(1111);
+        user.setPassword(null);
         hibernateTemplate.update(user);
 
         hibernateTemplate.flush();

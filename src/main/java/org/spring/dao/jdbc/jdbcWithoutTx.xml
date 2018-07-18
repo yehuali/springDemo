@@ -7,7 +7,13 @@
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
     <context:component-scan base-package="org.spring.dao.jdbc"/>
-    <context:property-placeholder location="classpath:org/spring/dao/jdbc/jdbc.properties"/>
+   <!-- <context:property-placeholder location="classpath:org/spring/dao/jdbc/jdbc.properties"/>-->
+    <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties">
+            <bean id="remoteProperties" class="org.spring.dao.jdbc.RemoteProperties"/>
+        </property>
+        <!--<property name="location" value="classpath:org/spring/dao/jdbc/jdbc.properties"/>-->
+    </bean>
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
                         destroy-method="close"
                         p:driverClassName="${jdbc.driverClassName}"
