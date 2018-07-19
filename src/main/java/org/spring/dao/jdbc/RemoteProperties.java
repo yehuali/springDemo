@@ -8,6 +8,7 @@ import java.util.Properties;
 
 /**
  * 把配置文件放在远程的git或svn这类云平台之上
+ * BeanFactoryPostProcessor类的postProcessBeanFactory方法调用是在Bean定义解析后，因此当前的beanFactory参数中有所有bean定义
  */
 public class RemoteProperties implements InitializingBean,FactoryBean<Properties> {
 
